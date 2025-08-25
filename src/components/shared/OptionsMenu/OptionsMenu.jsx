@@ -11,7 +11,7 @@ const OptionsMenu = ({ postId, commentId, isFromComment = false }) => {
       toast.success("Post deleted successfully");
       queryClient.invalidateQueries(["all-posts"]);
       queryClient.invalidateQueries(["user-posts"]);
-        // queryClient.invalidateQueries(["post-details",postId]);
+      queryClient.invalidateQueries(["post-details", postId]);
     },
     onError: () => {
       toast.error("Failed to delete post");
