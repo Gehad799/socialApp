@@ -6,8 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 const PostsList = ({ isHome = true }) => {
   const { userData } = useContext(AuthContext);
   const { data } = useQuery({
-    queryKey: ["all-posts", "user-posts"],
+    queryKey: isHome ? ["all-posts"] : ["user-posts"],
     queryFn: getAllPosts,
+    enabled: !!userData,
   });
 
   async function getAllPosts() {

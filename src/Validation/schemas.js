@@ -51,5 +51,5 @@ export const loginSchema = z.object({
 });
 
 export const postSchema = z.object({
-  body: z.string().min(5, { message: "post must be at least 5 characters" }), 
+  body: z.string().min(3, { message: "post must be at least 3 characters" }), 
 });
