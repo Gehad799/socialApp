@@ -1,9 +1,10 @@
-import { Avatar, Card } from "flowbite-react";
+import { Avatar, Card, Tooltip } from "flowbite-react";
 import { formatDate } from "../../utils/formatDate";
 import { CgDetailsMore } from "react-icons/cg";
 import { FaComment } from "react-icons/fa";
 import { Link, useParams } from "react-router";
 import UserComment from "../comments/userComment";
+import AddComment from "../comments/addComment";
 
 export default function PostsItem({ post, showAllComments = false }) {
   const { id: paramPostId } = useParams();
@@ -31,10 +32,13 @@ export default function PostsItem({ post, showAllComments = false }) {
         </div>
       </header>
       {/* content */}
-      <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-        {body}
-      </h5>
-      {image &&<img src={image} alt={body} />}
+      <div className="overflow-hidden ">
+
+        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white ">
+          {body}
+        </h5>
+        </div>
+      {image && <img src={image} alt={body} />}
 
       {/* footer:  details,comment */}
       <div className="flex items-center justify-between">
@@ -52,7 +56,8 @@ export default function PostsItem({ post, showAllComments = false }) {
       </div>
 
       {/* comments */}
-      {(comments && comments.length>0) &&
+      {comments &&
+        comments.length > 0 &&
         (showAllComments ? (
           <>
             {comments.map((comment) => (
@@ -60,8 +65,9 @@ export default function PostsItem({ post, showAllComments = false }) {
             ))}
           </>
         ) : (
-          <UserComment comments={comments[0]} />
+          <UserComment comments={comments[comments.length - 1]} />
         ))}
+      <AddComment post={postId} />
     </Card>
   );
 }

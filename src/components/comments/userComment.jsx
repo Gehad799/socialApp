@@ -2,12 +2,12 @@ import { Avatar } from "flowbite-react";
 import { formatDate } from "../../utils/formatDate";
 
 const UserComment = ({ comments }) => {
+  console.log(comments);
   const {
     content,
     createdAt,
     commentCreator: { name, photo },
   } = comments;
-  // console.log(comments);
 
   return (
     <div className="mt-4 p-2 border border-gray-200 rounded-lg ">
@@ -25,7 +25,6 @@ const UserComment = ({ comments }) => {
       <h5 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
         {content}
       </h5>
-      {/* content */}
     </div>
   );
 };

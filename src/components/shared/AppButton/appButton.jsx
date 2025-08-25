@@ -2,7 +2,7 @@ import { Button, Spinner } from "flowbite-react";
 
 const AppButton = ({ children, isLoading, ...props }) => {
   return (
-    <Button {...props}>
+    <Button {...props} className="cursor-pointer">
         {isLoading && ( 
       <Spinner
         size="sm"

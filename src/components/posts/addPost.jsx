@@ -1,9 +1,4 @@
-import {
-  Card,
-  Label,
-  Textarea,
-  TextInput,
-} from "flowbite-react";
+import { Card, Label, Textarea, TextInput } from "flowbite-react";
 import AppButton from "../shared/AppButton/appButton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,28 +8,30 @@ import { FiUploadCloud } from "react-icons/fi";
 import { useRef } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function AddPost() {
   const fileRef = useRef();
+  const querClient=useQueryClient()
   const {
     register,
     handleSubmit,
-    formState: { errors , isValid},
-    setValue
-
+    formState: { errors, isValid },
+    setValue,
   } = useForm({
     mode: "onChange",
     resolver: zodResolver(postSchema),
   });
 
-  const { mutate: addNewPost,isPending } = useMutation({
+  const { mutate: addNewPost, isPending } = useMutation({
     mutationFn: addPost,
     onSuccess: () => {
       toast.success("Post added successfully");
       setValue("body", "");
       setValue("image", null);
-
+      // querClient.invalidateQueries[("post-details", post)];
+      querClient.invalidateQueries(["all-posts"]);
+      querClient.invalidateQueries(["user-posts"]);
     },
     onError: () => {
       toast.error("Failed to add post");
@@ -95,7 +92,13 @@ export default function AddPost() {
                 {errors.body && <ValidationError error={errors.body.message} />}
               </div>
 
-              <AppButton isLoading={isPending} disabled={isPending || !isValid} type="submit">Create post</AppButton>
+              <AppButton
+                isLoading={isPending}
+                disabled={isPending || !isValid}
+                type="submit"
+              >
+                Create post
+              </AppButton>
             </form>
           </Card>
         </div>
