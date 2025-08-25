@@ -1,25 +1,46 @@
 import { createBrowserRouter } from "react-router";
-import Layout from "../components/layout/Layout";
-import Posts from "../pages/Posts/posts";
-import Login from "../pages/Login/login";
-import Register from "../pages/Register/register";
-import NotFound from "../pages/Notfound/notFound";
-import ProtectedRoutes from "./ProtectedRoutes";
-import ProtectedAuthRoutes from "./ProtectedAuthRoutes";
-import PostDetails from "../pages/PostDetails/postDetails";
-import Profile from "../pages/Profile/profile";
+import { lazy, Suspense } from "react";
+import GlobalSpinner from "../components/shared/GlobalSpinner/GlobalSpinner";
+const Layout = lazy(() => import("../components/layout/Layout"));
+const Posts = lazy(() => import("../pages/Posts/posts"));
+const Login = lazy(() => import("../pages/Login/login"));
+const Register = lazy(() => import("../pages/Register/register"));
+const NotFound = lazy(() => import("../pages/Notfound/notFound"));
+const ProtectedRoutes = lazy(() => import("./ProtectedRoutes"));
+const ProtectedAuthRoutes = lazy(() => import("./ProtectedAuthRoutes"));
+const PostDetails = lazy(() => import("../pages/PostDetails/postDetails"));
+const Profile = lazy(() => import("../pages/Profile/profile"));
+// import Layout from "../components/layout/Layout";
+// import Posts from "../pages/Posts/posts";
+// import Login from "../pages/Login/login";
+// import Register from "../pages/Register/register";
+// import NotFound from "../pages/Notfound/notFound";
+// import ProtectedRoutes from "./ProtectedRoutes";
+// import ProtectedAuthRoutes from "./ProtectedAuthRoutes";
+// import PostDetails from "../pages/PostDetails/postDetails";
+// import Profile from "../pages/Profile/profile";
 
 export const router = createBrowserRouter([
   {
-    errorElement: <NotFound />,
+    errorElement: (
+      <Suspense fallback={<GlobalSpinner />}>
+        <NotFound />
+      </Suspense>
+    ),
     path: "/",
-    element: <Layout />,
+    element: (
+      <Suspense fallback={<GlobalSpinner />}>
+        <Layout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
         element: (
           <ProtectedRoutes>
-            <Posts />
+            <Suspense fallback={<GlobalSpinner />}>
+              <Posts />
+            </Suspense>
           </ProtectedRoutes>
         ),
       },
@@ -27,15 +48,19 @@ export const router = createBrowserRouter([
         path: "/posts",
         element: (
           <ProtectedRoutes>
-            <Posts />
+            <Suspense fallback={<GlobalSpinner />}>
+              <Posts />
+            </Suspense>
           </ProtectedRoutes>
         ),
       },
-         {
+      {
         path: "/profile",
         element: (
           <ProtectedRoutes>
-            <Profile />
+            <Suspense fallback={<GlobalSpinner />}>
+              <Profile />
+            </Suspense>
           </ProtectedRoutes>
         ),
       },
@@ -43,7 +68,9 @@ export const router = createBrowserRouter([
         path: "/posts/:id",
         element: (
           <ProtectedRoutes>
-            <PostDetails />
+            <Suspense fallback={<GlobalSpinner />}>
+              <PostDetails />
+            </Suspense>
           </ProtectedRoutes>
         ),
       },
@@ -51,7 +78,9 @@ export const router = createBrowserRouter([
         path: "/login",
         element: (
           <ProtectedAuthRoutes>
-            <Login />
+            <Suspense fallback={<GlobalSpinner />}>
+              <Login />
+            </Suspense>
           </ProtectedAuthRoutes>
         ),
       },
@@ -59,7 +88,9 @@ export const router = createBrowserRouter([
         path: "/register",
         element: (
           <ProtectedAuthRoutes>
-            <Register />
+            <Suspense fallback={<GlobalSpinner />}>
+              <Register />
+            </Suspense>
           </ProtectedAuthRoutes>
         ),
       },

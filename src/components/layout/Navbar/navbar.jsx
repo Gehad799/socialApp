@@ -87,9 +87,7 @@ const { userData, setUserData } = useContext(AuthContext);
             <NavbarLink as={NavLink} to="/" active>
               Home
             </NavbarLink>
-            <NavbarLink as={NavLink} to="/">
-              Posts
-            </NavbarLink>
+           
           </NavbarCollapse>
         )}
       </Navbar>
