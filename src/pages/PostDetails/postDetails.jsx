@@ -1,12 +1,15 @@
 import axios from "axios";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import PostsItem from "../../components/posts/postsItem";
 import { useQuery } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const PostDetails = () => {
   const { id: postId } = useParams();
-  const { data, isLoading } = useQuery({
+  const navigate = useNavigate();
+  const { data, isLoading,isError } = useQuery({
     queryKey: ["post-details", postId],
     queryFn: getPostDetails,
   });
@@ -15,9 +18,16 @@ const PostDetails = () => {
   //     console.log("post details", data?.data?.post);
   //   }
   // }, [data]);
+//  useEffect(() => {
+//   console.log(data);
+  
+//     if (data?.data?.post === null) {
+//       navigate("/");
+//     }
+//   }, [data]);
 
   async function getPostDetails() {
-    return axios.get(`https://linked-posts.routemisr.com/posts/${postId}`, {
+    return await axios.get(`https://linked-posts.routemisr.com/posts/${postId}`, {
       headers: {
         token: localStorage.getItem("token"),
       },

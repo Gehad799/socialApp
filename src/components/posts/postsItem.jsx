@@ -5,6 +5,9 @@ import { FaComment } from "react-icons/fa";
 import { Link, useParams } from "react-router";
 import UserComment from "../comments/userComment";
 import AddComment from "../comments/addComment";
+import OptionsMenu from "../shared/OptionsMenu/OptionsMenu";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function PostsItem({ post, showAllComments = false }) {
   const { id: paramPostId } = useParams();
@@ -16,28 +19,33 @@ export default function PostsItem({ post, showAllComments = false }) {
     image,
     user: { _id, name, photo },
   } = post;
+  const {
+    userData,
+  } = useContext(AuthContext);
 
   return (
     <Card>
       {/* user info */}
-      <header className="flex flex-row gap-3 ">
-        <Avatar img={photo} alt={name} rounded />
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {name}
-          </h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {formatDate(createdAt)}
-          </p>
+      <header className="flex  justify-between items-center">
+        <div className="flex flex-row gap-3 items-center">
+          <Avatar img={photo} alt={name} rounded />
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              {name}
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {formatDate(createdAt)}
+            </p>
+          </div>
         </div>
+        {userData?._id === _id && <OptionsMenu postId={postId} />}
       </header>
       {/* content */}
       <div className="overflow-hidden ">
-
         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white ">
           {body}
         </h5>
-        </div>
+      </div>
       {image && <img src={image} alt={body} />}
 
       {/* footer:  details,comment */}
@@ -61,11 +69,11 @@ export default function PostsItem({ post, showAllComments = false }) {
         (showAllComments ? (
           <>
             {comments.map((comment) => (
-              <UserComment key={comment._id} comments={comment} />
+              <UserComment key={comment._id} comments={comment} userData={userData} />
             ))}
           </>
         ) : (
-          <UserComment comments={comments[comments.length - 1]} />
+          <UserComment comments={comments[comments.length - 1]} userData={userData}  />
         ))}
       <AddComment post={postId} />
     </Card>

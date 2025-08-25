@@ -29,7 +29,6 @@ export default function AddPost() {
       toast.success("Post added successfully");
       setValue("body", "");
       setValue("image", null);
-      // querClient.invalidateQueries[("post-details", post)];
       querClient.invalidateQueries(["all-posts"]);
       querClient.invalidateQueries(["user-posts"]);
     },
