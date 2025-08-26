@@ -1,12 +1,14 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Navigate } from "react-router";
 
 export const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
     const [userData, setUserData] = useState(null);
+    const [authError, setAuthError] = useState(false);
 
     async function getUserData(userToken) {
     try {
@@ -26,6 +28,9 @@ export default function AuthContextProvider({ children }) {
     } catch (error) {
       const errorMsg = error.response?.data?.error;
       toast.error(errorMsg);
+       setToken(null);
+      localStorage.removeItem("token");
+      setAuthError(true); 
     }
   }
 
@@ -34,6 +39,9 @@ export default function AuthContextProvider({ children }) {
       getUserData(token);
     }
   }, [token]);
+    if (authError) {
+    return <Navigate to="/login"  />;
+  }
   return (
     <AuthContext.Provider value={{ token ,setToken,userData,setUserData}}>{children}</AuthContext.Provider>
   );

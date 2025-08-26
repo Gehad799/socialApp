@@ -64,6 +64,9 @@ const { userData, setUserData } = useContext(AuthContext);
                 <DropdownItem as={NavLink} to="/profile">
                   Profile
                 </DropdownItem>
+                <DropdownItem as={NavLink} to="/settings">
+                  Settings
+                </DropdownItem>
                 <DropdownDivider />
                 <DropdownItem as="button" onClick={handleLogOut}>
                   Sign out

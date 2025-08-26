@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { lazy, Suspense } from "react";
 import GlobalSpinner from "../components/shared/GlobalSpinner/GlobalSpinner";
+import Settings from "../pages/Settings/Settings";
 const Layout = lazy(() => import("../components/layout/Layout"));
 const Posts = lazy(() => import("../pages/Posts/posts"));
 const Login = lazy(() => import("../pages/Login/login"));
@@ -60,6 +61,16 @@ export const router = createBrowserRouter([
           <ProtectedRoutes>
             <Suspense fallback={<GlobalSpinner />}>
               <Profile />
+            </Suspense>
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/settings",
+        element: (
+          <ProtectedRoutes>
+            <Suspense fallback={<GlobalSpinner />}>
+              <Settings />
             </Suspense>
           </ProtectedRoutes>
         ),

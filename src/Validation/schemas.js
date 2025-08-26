@@ -59,3 +59,24 @@ export const commentSchema = z.object({
     .string()
     .min(2, { message: "comment must be at least 2 characters" }),
 });
+
+export const changePasswordSchema = z.object({
+  password: z
+    .string({ message: "password is required" })
+    .min(8, {
+      message: "password must be at least 8 characters",
+    })
+    .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, {
+      message:
+        "password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    }),
+  newPassword: z
+    .string({ message: "password is required" })
+    .min(8, {
+      message: "password must be at least 8 characters",
+    })
+    .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, {
+      message:
+        "password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    }),
+});
