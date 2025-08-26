@@ -3,7 +3,12 @@ import axios from "axios";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import toast from "react-hot-toast";
 
-const OptionsMenu = ({ postId, commentId, isFromComment = false }) => {
+const OptionsMenu = ({
+  postId,
+  commentId,
+  isFromComment = false,
+  setIsEditing,
+}) => {
   const queryClient = useQueryClient();
   const { mutate: deletePost } = useMutation({
     mutationFn: handleDeletePost,
@@ -31,7 +36,7 @@ const OptionsMenu = ({ postId, commentId, isFromComment = false }) => {
       toast.success("Comment deleted successfully");
       queryClient.invalidateQueries(["all-posts"]);
       queryClient.invalidateQueries(["user-posts"]);
-      queryClient.invalidateQueries(["post-details"]);
+      queryClient.invalidateQueries(["post-details", postId]);
     },
     onError: () => {
       toast.error("Failed to delete comment");
@@ -47,9 +52,12 @@ const OptionsMenu = ({ postId, commentId, isFromComment = false }) => {
       }
     );
   }
+
   return (
     <Dropdown inline label="">
-      <DropdownItem>Edit</DropdownItem>
+      <DropdownItem onClick={isFromComment && (() => setIsEditing(true))}>
+        Edit
+      </DropdownItem>
       <DropdownItem onClick={isFromComment ? deleteComment : deletePost}>
         Delete
       </DropdownItem>
