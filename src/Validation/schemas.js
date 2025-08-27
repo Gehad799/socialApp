@@ -80,3 +80,16 @@ export const changePasswordSchema = z.object({
         "password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
     }),
 });
+
+export const editImageSchema = z.object({
+  photo: z
+    .instanceof(FileList)
+    .refine((files) => files.length === 1, { message: "Image is required" })
+    .refine((files) => files[0].size <= 4 * 1024 * 1024, {
+      message: "Image size must be less than 4MB",
+    })
+    .refine(
+      (files) => files[0].type === "image/jpeg" || files[0].type === "image/png" || files[0].type === "image/jpg",
+      { message: "File must be a JPEG or PNG file" }
+    )
+});

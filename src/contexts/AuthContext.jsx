@@ -43,6 +43,6 @@ export default function AuthContextProvider({ children }) {
     return <Navigate to="/login"  />;
   }
   return (
-    <AuthContext.Provider value={{ token ,setToken,userData,setUserData}}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ token ,setToken,userData,setUserData,getUserData}}>{children}</AuthContext.Provider>
   );
 }
