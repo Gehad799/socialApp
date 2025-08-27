@@ -1,17 +1,19 @@
 import * as z from "zod";
 const imageValidation = z
-  .instanceof(FileList)
-  .refine((files) => files.length === 1, { message: "Image is required" })
-  .refine((files) => files[0].size <= 4 * 1024 * 1024, {
-    message: "Image size must be less than 4MB",
-  })
+  .any()
+  .refine(
+    (files) => !files || !files[0] || files[0].size <= 4 * 1024 * 1024,
+    { message: "Image size must be less than 4MB" }
+  )
   .refine(
     (files) =>
-      files[0].type === "image/jpeg" ||
-      files[0].type === "image/png" ||
-      files[0].type === "image/jpg",
+      !files ||
+      !files[0] ||
+      ["image/jpeg", "image/png", "image/jpg"].includes(files[0].type),
     { message: "File must be a JPEG or PNG file" }
-  );
+  )
+  .optional();
+
 export const registerSchema = z
   .object({
     email: z.email({ message: "Invalid email address" }),

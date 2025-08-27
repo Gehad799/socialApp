@@ -5,30 +5,45 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema } from "../../Validation/schemas";
 import ValidationError from "../shared/Validationerror/validationErrors";
 import { FiUploadCloud } from "react-icons/fi";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { MdClose } from "react-icons/md";
 
 export default function AddPost() {
   const fileRef = useRef();
   const querClient = useQueryClient();
+  const [previewImage, setPreviewImage] = useState(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm({
     mode: "onChange",
     resolver: zodResolver(postSchema),
   });
 
+  const watchImage = watch("image");
+  useEffect(() => {
+    if (watchImage && watchImage[0]) {
+      const objectUrl = URL.createObjectURL(watchImage[0]);
+      setPreviewImage(objectUrl);
+
+      return () => URL.revokeObjectURL(objectUrl);
+    } else {
+      setPreviewImage(null);
+    }
+  }, [watchImage]);
   const { mutate: addNewPost, isPending } = useMutation({
     mutationFn: addPost,
     onSuccess: () => {
       toast.success("Post added successfully");
       setValue("body", "");
       setValue("image", null);
+      setPreviewImage(null);
       querClient.invalidateQueries(["all-posts"]);
       querClient.invalidateQueries(["user-posts"]);
     },
@@ -54,6 +69,10 @@ export default function AddPost() {
       }
     );
   }
+  const clearImage = () => {
+    setValue("image", null);
+    setPreviewImage(null);
+  };
   return (
     <>
       <section className="max-w-2xl mx-auto my-10">
@@ -100,8 +119,23 @@ export default function AddPost() {
                 </div>
 
                 {errors.body && <ValidationError error={errors.body.message} />}
-                {errors.image && (
+                {errors.image ? (
                   <ValidationError error={errors.image.message} />
+                ) : (
+                  previewImage && (
+                    <div className="flex justify-center mt-4">
+                      <img
+                        src={previewImage}
+                        alt="previewImage"
+                        className="max-h-48 rounded-lg   "
+                      />
+                      <MdClose
+                        size={20}
+                        className="cursor-pointer"
+                        onClick={clearImage}
+                      />
+                    </div>
+                  )
                 )}
               </div>
 

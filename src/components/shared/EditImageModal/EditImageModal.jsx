@@ -118,25 +118,26 @@ export function EditImageModal({ openEditImageModal, setOpenEditImageModal }) {
               </Label>
 
               {/*  Preview the uploaded image */}
-              {preview && (
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="max-h-48 rounded-lg border"
-                />
-              )}
-
-              {errors?.photo && (
+              {errors?.photo ? (
                 <ValidationError error={errors.photo.message} />
+              ) : (
+                preview && (
+                  <img
+                    src={preview}
+                    alt="Preview"
+                    className="max-h-48 rounded-lg border"
+                  />
+                )
               )}
-
-              <AppButton
-                type="submit"
-                disabled={isPending}
-                isLoading={isPending}
-              >
-                Upload
-              </AppButton>
+              {!errors?.photo && preview && (
+                <AppButton
+                  type="submit"
+                  disabled={isPending}
+                  isLoading={isPending}
+                >
+                  Upload
+                </AppButton>
+              )}
             </div>
           </form>
         </div>
