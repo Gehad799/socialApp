@@ -38,7 +38,7 @@ export default function PostsItem({ post, showAllComments = false }) {
             </p>
           </div>
         </div>
-        {userData?._id === _id && <OptionsMenu postId={postId} />}
+        {userData?._id === _id && <OptionsMenu postId={postId} post={post} />}
       </header>
       {/* content */}
       <div className="overflow-hidden ">

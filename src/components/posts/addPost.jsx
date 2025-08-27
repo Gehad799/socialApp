@@ -127,7 +127,7 @@ export default function AddPost() {
                       <img
                         src={previewImage}
                         alt="previewImage"
-                        className="max-h-48 rounded-lg   "
+                        className="max-h-48 rounded-lg"
                       />
                       <MdClose
                         size={20}

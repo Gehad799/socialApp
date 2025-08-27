@@ -1,15 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Dropdown, DropdownItem } from "flowbite-react";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { EditPostModal } from "../EditPostModal/EditPostModal";
 
 const OptionsMenu = ({
   postId,
   commentId,
   isFromComment = false,
   setIsEditing,
+  post,
 }) => {
   const queryClient = useQueryClient();
+  const [openModal, setOpenModal] = useState(false);
   const { mutate: deletePost } = useMutation({
     mutationFn: handleDeletePost,
     onSuccess: () => {
@@ -54,14 +58,27 @@ const OptionsMenu = ({
   }
 
   return (
-    <Dropdown inline label="">
-      <DropdownItem onClick={isFromComment && (() => setIsEditing(true))}>
-        Edit
-      </DropdownItem>
-      <DropdownItem onClick={isFromComment ? deleteComment : deletePost}>
-        Delete
-      </DropdownItem>
-    </Dropdown>
+    <>
+      <Dropdown inline label="">
+        <DropdownItem
+          onClick={
+            isFromComment ? () => setIsEditing(true) : () => setOpenModal(true)
+          }
+        >
+          Edit
+        </DropdownItem>
+        <DropdownItem onClick={isFromComment ? deleteComment : deletePost}>
+          Delete
+        </DropdownItem>
+      </Dropdown>
+      {openModal && (
+        <EditPostModal
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          post={post}
+        />
+      )}
+    </>
   );
 };
 
