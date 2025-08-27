@@ -1,4 +1,4 @@
-import { Card, Label, Textarea, TextInput } from "flowbite-react";
+import { Card, FileInput, Label, Textarea, TextInput } from "flowbite-react";
 import AppButton from "../shared/AppButton/appButton";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,11 +12,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function AddPost() {
   const fileRef = useRef();
-  const querClient=useQueryClient()
+  const querClient = useQueryClient();
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     setValue,
   } = useForm({
     mode: "onChange",
@@ -74,12 +74,23 @@ export default function AddPost() {
                     rows={2}
                     {...register("body")}
                   />
-                  <input
+                  {/* <input
                     {...register("image")}
                     type="file"
                     ref={fileRef}
                     className="hidden"
                     accept="image/*"
+                  /> */}
+
+                  <FileInput
+                    {...register("image")}
+                    ref={(el) => {
+                      register("image").ref(el);
+                      fileRef.current = el;
+                    }}
+                    type="file"
+                    className="hidden"
+                    accept="image/jpeg, image/png, image/jpg"
                   />
                   <FiUploadCloud
                     size={24}
@@ -89,11 +100,14 @@ export default function AddPost() {
                 </div>
 
                 {errors.body && <ValidationError error={errors.body.message} />}
+                {errors.image && (
+                  <ValidationError error={errors.image.message} />
+                )}
               </div>
 
               <AppButton
                 isLoading={isPending}
-                disabled={isPending || !isValid}
+                disabled={isPending}
                 type="submit"
               >
                 Create post

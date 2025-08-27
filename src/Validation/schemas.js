@@ -1,5 +1,17 @@
 import * as z from "zod";
-
+const imageValidation = z
+  .instanceof(FileList)
+  .refine((files) => files.length === 1, { message: "Image is required" })
+  .refine((files) => files[0].size <= 4 * 1024 * 1024, {
+    message: "Image size must be less than 4MB",
+  })
+  .refine(
+    (files) =>
+      files[0].type === "image/jpeg" ||
+      files[0].type === "image/png" ||
+      files[0].type === "image/jpg",
+    { message: "File must be a JPEG or PNG file" }
+  );
 export const registerSchema = z
   .object({
     email: z.email({ message: "Invalid email address" }),
@@ -52,6 +64,7 @@ export const loginSchema = z.object({
 
 export const postSchema = z.object({
   body: z.string().min(3, { message: "post must be at least 3 characters" }),
+  image: imageValidation,
 });
 
 export const commentSchema = z.object({
@@ -82,14 +95,5 @@ export const changePasswordSchema = z.object({
 });
 
 export const editImageSchema = z.object({
-  photo: z
-    .instanceof(FileList)
-    .refine((files) => files.length === 1, { message: "Image is required" })
-    .refine((files) => files[0].size <= 4 * 1024 * 1024, {
-      message: "Image size must be less than 4MB",
-    })
-    .refine(
-      (files) => files[0].type === "image/jpeg" || files[0].type === "image/png" || files[0].type === "image/jpg",
-      { message: "File must be a JPEG or PNG file" }
-    )
+  photo: imageValidation,
 });
